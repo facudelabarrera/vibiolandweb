@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
+/* ─── Vibioland Design Tokens ─────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primitives — tierra palette */
+  --vbl-tierra-900: #242018;
+  --vbl-tierra-800: #3f3926;
+  --vbl-tierra-700: #5f5134;
+  --vbl-tierra-600: #847132;
+  --vbl-tierra-500: #a79854;
+  --vbl-tierra-400: #dbc56c;
+  --vbl-tierra-300: #dedaa9;
+  --vbl-tierra-200: #f1edcf;
+  --vbl-tierra-100: #f1efe4;
+  --vbl-blanco: #ffffff;
+  --vbl-negro: #000000;
+  --vbl-gris-calido: #b2b0a9;
+  --vbl-gris-claro: #d9d9d9;
+
+  /* Semantic aliases */
+  --vbl-bg-default:   var(--vbl-tierra-100);
+  --vbl-bg-alt:       var(--vbl-tierra-200);
+  --vbl-bg-subtle:    var(--vbl-tierra-300);
+  --vbl-bg-dark:      var(--vbl-tierra-800);
+  --vbl-text-primary:   var(--vbl-tierra-900);
+  --vbl-text-secondary: var(--vbl-tierra-700);
+  --vbl-text-muted:     var(--vbl-tierra-600);
+  --vbl-text-on-dark:   var(--vbl-blanco);
+  --vbl-cta:          var(--vbl-tierra-400);
+  --vbl-brand-gold:   var(--vbl-tierra-500);
+  --vbl-icon:         var(--vbl-negro);
 }
+
+/* ─── Tailwind v4 Theme ────────────────────────────────────────────────────── */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Typography */
+  --font-sans:  var(--font-mulish), 'Mulish', sans-serif;
+  --font-serif: var(--font-stix), 'STIX Two Text', serif;
+
+  /* Colors — semantic layer */
+  --color-bg-default:   var(--vbl-bg-default);
+  --color-bg-alt:       var(--vbl-bg-alt);
+  --color-bg-subtle:    var(--vbl-bg-subtle);
+  --color-bg-dark:      var(--vbl-bg-dark);
+  --color-text-primary:   var(--vbl-text-primary);
+  --color-text-secondary: var(--vbl-text-secondary);
+  --color-text-muted:     var(--vbl-text-muted);
+  --color-text-on-dark:   var(--vbl-text-on-dark);
+  --color-cta:          var(--vbl-cta);
+  --color-brand-gold:   var(--vbl-brand-gold);
+  --color-icon:         var(--vbl-icon);
+  --color-gris-calido:  var(--vbl-gris-calido);
+  --color-gris-claro:   var(--vbl-gris-claro);
+
+  /* Colors — primitive ladder (for Tailwind escape hatches) */
+  --color-tierra-900: var(--vbl-tierra-900);
+  --color-tierra-800: var(--vbl-tierra-800);
+  --color-tierra-700: var(--vbl-tierra-700);
+  --color-tierra-600: var(--vbl-tierra-600);
+  --color-tierra-500: var(--vbl-tierra-500);
+  --color-tierra-400: var(--vbl-tierra-400);
+  --color-tierra-300: var(--vbl-tierra-300);
+  --color-tierra-200: var(--vbl-tierra-200);
+  --color-tierra-100: var(--vbl-tierra-100);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--vbl-bg-default);
+  color: var(--vbl-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
