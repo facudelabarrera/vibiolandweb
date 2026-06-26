@@ -41,20 +41,18 @@ export function DisenoSection() {
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const circleRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
 
-  // Move circle to a row's center (relative to container)
   const moveCircleTo = (row: HTMLDivElement) => {
     if (!circleRef.current) return;
-    // offsetTop is relative to offsetParent; row's parent is the containerRef div
     const target = row.offsetTop + row.offsetHeight / 2;
     gsap.to(circleRef.current, {
       top: target,
-      duration: 0.55,
-      ease: "power2.inOut",
+      duration: 0.25,
+      ease: "power3.out",
     });
   };
 
-  // Set initial circle position after mount
   useEffect(() => {
     const first = rowRefs.current[0];
     if (first && circleRef.current) {
@@ -62,33 +60,34 @@ export function DisenoSection() {
     }
   }, []);
 
-  // IntersectionObserver: trigger when row is >40% in a shrunk viewport (root margin)
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
+    const handleScroll = () => {
+      const viewportCenter = window.scrollY + window.innerHeight / 2;
 
-    rowRefs.current.forEach((row, i) => {
-      if (!row) return;
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActive(i);
-              moveCircleTo(row);
-            }
-          });
-        },
-        {
-          threshold: 0.4,
-          // Shrink the effective viewport so the trigger fires closer to center screen
-          rootMargin: "-15% 0px -15% 0px",
+      let closestIdx = 0;
+      let closestDist = Infinity;
+
+      rowRefs.current.forEach((row, i) => {
+        if (!row) return;
+        const rowCenter = window.scrollY + row.getBoundingClientRect().top + row.offsetHeight / 2;
+        const dist = Math.abs(rowCenter - viewportCenter);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closestIdx = i;
         }
-      );
-      obs.observe(row);
-      observers.push(obs);
-    });
+      });
 
-    return () => observers.forEach((o) => o.disconnect());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (closestIdx !== activeRef.current) {
+        activeRef.current = closestIdx;
+        setActive(closestIdx);
+        const row = rowRefs.current[closestIdx];
+        if (row) moveCircleTo(row);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -112,8 +111,8 @@ export function DisenoSection() {
             ref={circleRef}
             className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border z-10"
             style={{
-              width: "10px",
-              height: "10px",
+              width: "24px",
+              height: "24px",
               backgroundColor: "#dbc56c",
               borderColor: "#3f3926",
               top: 0,
@@ -131,16 +130,16 @@ export function DisenoSection() {
               }}
             >
               {/* Left column — odd steps (0, 2, 4) show here, right-aligned */}
-              <div className="flex-[1_0_0] min-w-0 flex flex-col gap-[10px] items-end text-right">
+              <div className="flex-[1_0_0] min-w-0 flex flex-col gap-[10px] items-end">
                 {step.side === "left" && (
                   <>
-                    <p className="font-serif text-[72px] leading-[1.05] text-text-primary">
+                    <p className="w-full text-center font-serif text-[72px] leading-[1.05] text-text-primary">
                       {step.number}
                     </p>
-                    <p className="font-serif text-[30px] leading-[1.3] text-text-primary">
+                    <p className="text-right font-serif text-[30px] leading-[1.3] text-text-primary">
                       {step.title}
                     </p>
-                    <p className="font-sans text-[18px] leading-[1.6] text-text-primary">
+                    <p className="text-right font-sans text-[18px] leading-[1.6] text-text-primary">
                       {step.body}
                     </p>
                   </>
@@ -151,7 +150,7 @@ export function DisenoSection() {
               <div className="flex-[1_0_0] min-w-0 flex flex-col gap-[10px] items-start">
                 {step.side === "right" && (
                   <>
-                    <p className="font-serif text-[72px] leading-[1.05] text-bg-dark">
+                    <p className="w-full text-center font-serif text-[72px] leading-[1.05] text-bg-dark">
                       {step.number}
                     </p>
                     <p className="font-serif text-[30px] leading-[1.3] text-bg-dark">

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const faqData = [
   {
-    category: "Sobre el proyecto",
+    category: "sobre el proyecto",
     items: [
       {
         question: "¿Qué son los proyectos regenerativos?",
@@ -49,7 +49,7 @@ const faqData = [
     ],
   },
   {
-    category: "Sobre la comunidad",
+    category: "sobre LA COMUNIDAD",
     items: [
       {
         question: "¿Qué tipo de personas viven en Vibio?",
@@ -76,15 +76,10 @@ const faqData = [
         answer:
           "Desde el primer día. Los futuros vecinos participan en jornadas de convivencia, talleres de diseño y reuniones de comunidad durante los dos o tres años que dura la construcción. Cuando se mudan, ya son conocidos. Algunos ya son amigos.",
       },
-      {
-        question: "¿Qué pasa si mis vecinos y yo no nos llevamos bien?",
-        answer:
-          "Es algo que se trabaja activamente. Hay protocolos de gestión de conflictos, espacios de mediación y una cultura comunitaria que prioriza la escucha. No todos los conflictos se resuelven, pero sí se gestionan mejor que en un bloque de pisos anónimo.",
-      },
     ],
   },
   {
-    category: "Sobre el territorio",
+    category: "sobre EL TERRITORIO",
     items: [
       {
         question: "¿Por qué el mundo rural y no la ciudad?",
@@ -109,7 +104,7 @@ const faqData = [
     ],
   },
   {
-    category: "Sobre economía",
+    category: "sobre ECONOMÍA",
     items: [
       {
         question: "¿Cómo se financian los proyectos?",
@@ -129,7 +124,7 @@ const faqData = [
     ],
   },
   {
-    category: "Sobre las casas",
+    category: "sobre las casas",
     items: [
       {
         question: "¿Qué modelos de vivienda y de convivencia ofrece Vibio?",
@@ -154,7 +149,7 @@ const faqData = [
     ],
   },
   {
-    category: "Dar el paso",
+    category: "DAR EL PASO",
     items: [
       {
         question: "¿Cómo funciona el proceso para unirse a Vibio?",
@@ -184,7 +179,7 @@ const faqData = [
     ],
   },
   {
-    category: "Sobre el equipo",
+    category: "SOBRE EL EQUIPO",
     items: [
       {
         question: "¿Quién está detrás del proyecto?",
@@ -202,50 +197,46 @@ const faqData = [
 
 export default function FaqPage() {
   return (
-    <>
-      {/* Header */}
-      <section className="bg-bg-default pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-24 items-start">
-            <h1 className="font-serif text-5xl text-text-primary leading-tight">
-              Preguntas frecuentes
-            </h1>
-            <div className="font-sans text-base text-text-secondary leading-relaxed space-y-4">
-              <p>
-                Esto no es una compra de casa habitual. Esto es un proyecto de
-                vida, por eso sabemos que surgen muchas dudas.
-              </p>
-              <p>
-                Aquí van las respuestas a las preguntas que más nos llegan.
-              </p>
-              <p>
-                Si la tuya no está, escríbenos a{" "}
-                <a
-                  href="mailto:hola@vibio.land"
-                  className="text-text-primary underline hover:text-text-secondary transition-colors"
-                >
-                  hola@vibio.land
-                </a>
-              </p>
-            </div>
+    <div className="bg-bg-dark">
+      {/* Hero */}
+      <section className="pt-[181px] pb-[130px] px-[80px]">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-[519px_1fr] gap-[24px] items-start">
+          <h1 className="font-serif text-[48px] leading-[1.1] text-bg-default">
+            Preguntas frecuentes
+          </h1>
+          <div className="font-sans text-[18px] leading-[1.6] text-tierra-300 flex flex-col gap-[16px]">
+            <p>
+              Esto no es una compra de casa habitual. Esto es un proyecto de
+              vida, por eso sabemos que surgen muchas dudas. Aquí van las
+              respuestas a las preguntas que más nos llegan.
+            </p>
+            <p>
+              Si la tuya no está, escríbenos a{" "}
+              <a
+                href="mailto:hola@vibio.land"
+                className="text-cta underline hover:opacity-80 transition-opacity"
+              >
+                hola@vibio.land
+              </a>
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Accordion */}
-      <section className="bg-bg-default pb-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="lg:ml-[calc(33.333%+3rem)]">
-            {faqData.map((group) => (
-              <AccordionGroup
-                key={group.category}
-                category={group.category}
-                items={group.items}
-              />
-            ))}
-          </div>
+      {/* FAQ */}
+      <section className="px-[80px] pb-[100px]">
+        <div className="max-w-[1200px] mx-auto">
+          {faqData.map((group) => (
+            <AccordionGroup
+              key={group.category}
+              category={group.category}
+              items={group.items}
+            />
+          ))}
+          {/* Final border */}
+          <div className="border-t border-tierra-700/60" />
         </div>
       </section>
-    </>
+    </div>
   );
 }

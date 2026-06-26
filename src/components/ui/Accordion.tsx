@@ -16,28 +16,28 @@ function AccordionRow({ question, answer }: AccordionItem) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-gris-claro/50 last:border-b-0">
+    <div className="border-t border-tierra-700/60">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-start justify-between gap-6 py-5 text-left group"
+        className="w-full flex items-center justify-between gap-6 py-[16px] text-left group"
         aria-expanded={open}
       >
-        <span className="font-sans text-base font-medium text-text-primary group-hover:text-text-secondary transition-colors">
+        <span className="font-sans text-[18px] leading-[1.6] text-bg-default group-hover:opacity-80 transition-opacity">
           {question}
         </span>
         <span
-          className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full border border-gris-calido flex items-center justify-center text-text-muted transition-transform duration-200"
+          className="shrink-0 w-[29px] h-[29px] rounded-full border border-tierra-600 flex items-center justify-center text-tierra-400 transition-transform duration-200"
           style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
         >
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path d="M5 1v8M1 5h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+            <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
           </svg>
         </span>
       </button>
 
       {open && (
-        <div className="pb-6 pr-12">
-          <p className="font-sans text-sm text-text-secondary leading-relaxed whitespace-pre-line">
+        <div className="pb-[24px] pr-[40px]">
+          <p className="font-sans text-[16px] leading-[1.7] text-tierra-300 whitespace-pre-line">
             {answer}
           </p>
         </div>
@@ -48,13 +48,17 @@ function AccordionRow({ question, answer }: AccordionItem) {
 
 export function AccordionGroup({ category, items }: AccordionGroupProps) {
   return (
-    <div className="mb-10">
-      <p className="font-sans text-xs font-semibold uppercase tracking-widest text-text-muted mb-2 pb-3 border-b border-gris-claro">
-        {category}
-      </p>
-      {items.map((item) => (
-        <AccordionRow key={item.question} {...item} />
-      ))}
+    <div className="grid grid-cols-[450px_1fr] border-t border-tierra-700/60 pt-[4px] pb-[24px]">
+      <div>
+        <span className="font-sans text-[13px] leading-[1.6] text-tierra-500 tracking-[0.04em]">
+          {category}
+        </span>
+      </div>
+      <div>
+        {items.map((item) => (
+          <AccordionRow key={item.question} {...item} />
+        ))}
+      </div>
     </div>
   );
 }

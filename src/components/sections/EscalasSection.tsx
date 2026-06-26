@@ -80,7 +80,7 @@ export function EscalasSection() {
               onClick={() => setActive(i)}
               className="flex-1 h-[380px] relative rounded-[24px] overflow-hidden text-left"
             >
-              <Image src={escala.image} alt={escala.label} fill className="object-cover" />
+              <Image src={escala.image} alt={escala.label} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-0 left-0 right-0 p-[32px] flex items-center justify-between">
                 <span className="font-serif text-[30px] leading-[1.3] text-bg-default">
@@ -103,7 +103,7 @@ export function EscalasSection() {
         <div className="flex gap-[4px] min-h-[500px]">
           {/* Left: image card */}
           <div className="w-[400px] shrink-0 relative rounded-[24px] overflow-hidden">
-            <Image src={current.image} alt={current.label} fill className="object-cover" />
+            <Image src={current.image} alt={current.label} fill sizes="400px" className="object-cover" />
             <div className="absolute inset-0 bg-black/40" />
             <p className="absolute bottom-8 left-8 font-serif text-[30px] leading-[1.3] text-bg-default">
               {current.label}

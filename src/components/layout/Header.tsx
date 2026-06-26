@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/Button";
 const navLinks = [
   { href: "/como-funciona", label: "Cómo funciona" },
   { href: "/equipo", label: "Comunidades" },
-  { href: "/faq", label: "Vivir en Vibio" },
+  { href: "/vivirenvibio", label: "Vivir en Vibio" },
+  { href: "/faq", label: "Preguntas frecuentes" },
 ];
 
 export function Header() {

@@ -116,7 +116,7 @@ export default function ComoFuncionaPage() {
   return (
     <>
       {/* 1. Hero */}
-      <section className="relative h-[784px] overflow-hidden flex items-end">
+      <section className="relative h-screen min-h-[700px] overflow-hidden flex items-end">
         <Image
           src="/images/hero-comofunciona.png"
           alt="Comunidad Vibio en entorno natural"
@@ -171,7 +171,7 @@ export default function ComoFuncionaPage() {
             {convictionCards.map(({ category, title, body }) => (
               <div
                 key={category}
-                className="flex-1 rounded-[24px] border border-bg-dark p-[32px] flex flex-col gap-[17px]"
+                className="flex-1 rounded-[24px] border border-bg-dark p-[32px] flex flex-col gap-[17px] items-center text-center"
               >
                 <p className="font-sans text-[16px] text-text-muted uppercase">
                   {category}
@@ -206,6 +206,7 @@ export default function ComoFuncionaPage() {
                   src={src}
                   alt={`Rasgo ${i + 1}`}
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
                 />
               </div>
@@ -253,7 +254,7 @@ export default function ComoFuncionaPage() {
       {/* 8. Formulario de contacto */}
       <section className="bg-bg-default py-[100px] px-[80px]">
         <div className="max-w-7xl mx-auto flex gap-[48px] items-start">
-          <div className="max-w-[400px] flex flex-col gap-6">
+          <div className="flex-1 flex flex-col gap-6">
             <h2 className="font-serif text-[48px] leading-[1.1] text-black">
               Si sientes que Vibio puede ser para ti, escríbenos.
             </h2>
