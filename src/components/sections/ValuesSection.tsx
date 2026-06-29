@@ -50,7 +50,8 @@ function AccordionCard({
 }) {
   return (
     <div className="flex-1 min-w-0">
-      <div className="relative w-[94px] h-[88px] mb-8">
+      {/* SVG decorativo alineado con el título (offset = 29px circle + 12px gap) */}
+      <div className="relative w-[94px] h-[88px] mb-8 ml-[41px]">
         <Image src={icon} alt={label} fill className="object-contain object-bottom" />
       </div>
 
@@ -60,11 +61,11 @@ function AccordionCard({
         aria-expanded={open}
       >
         <div
-          className="shrink-0 w-[29px] h-[29px] rounded-full border border-text-primary flex items-center justify-center transition-transform duration-300"
+          className="shrink-0 w-[29px] h-[29px] rounded-full border border-[#847132] flex items-center justify-center transition-transform duration-300"
           style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
         >
           <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-            <path d="M5.5 1V10M1 5.5H10" stroke="#242018" strokeWidth="1.2" strokeLinecap="round" />
+            <path d="M5.5 1V10M1 5.5H10" stroke="#847132" strokeWidth="1.2" strokeLinecap="round" />
           </svg>
         </div>
         <div className="flex flex-col gap-3">

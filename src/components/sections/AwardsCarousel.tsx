@@ -28,9 +28,9 @@ export function AwardsCarousel({ awards }: { awards: Award[] }) {
       <div
         ref={trackRef}
         className="overflow-x-auto [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: "none" }}
+        style={{ scrollbarWidth: "none", paddingLeft: "max(80px, calc((100vw - 1200px) / 2))" }}
       >
-        <div className="flex" style={{ gap: `${GAP}px` }}>
+        <div className="flex" style={{ gap: `${GAP}px`, paddingRight: "max(80px, calc((100vw - 1200px) / 2))" }}>
           {awards.map((award, i) => (
             <div
               key={i}
@@ -56,7 +56,10 @@ export function AwardsCarousel({ awards }: { awards: Award[] }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between mt-[24px]">
+      <div
+        className="flex items-center justify-between mt-[24px]"
+        style={{ paddingLeft: "max(80px, calc((100vw - 1200px) / 2))", paddingRight: "max(80px, calc((100vw - 1200px) / 2))" }}
+      >
         <button
           onClick={() => scroll("left")}
           aria-label="Anterior"

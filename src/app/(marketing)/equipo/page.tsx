@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { TeamCarousel } from "@/components/sections/TeamCarousel";
+import { TeamMemberCards } from "@/components/sections/TeamMemberCards";
 import { AwardsCarousel } from "@/components/sections/AwardsCarousel";
 
 export const metadata: Metadata = {
@@ -8,18 +8,6 @@ export const metadata: Metadata = {
   description:
     "Detrás de Vibio hay un equipo diverso: un estudio de arquitectura, una promotora ecológica y una red de más de veinte especialistas.",
 };
-
-const memberPhotos = [
-  "/images/member1.png",
-  "/images/member2.png",
-  "/images/member3.png",
-  "/images/member4.png",
-  "/images/member5.png",
-  "/images/member6.png",
-  "/images/member7.png",
-  "/images/member8.png",
-  "/images/member9.png",
-];
 
 const awards = [
   {
@@ -92,10 +80,13 @@ export default function EquipoPage() {
         </div>
       </section>
 
-      {/* Team Carousel — full-bleed */}
+      {/* Team Member Cards — full-bleed with hover reveal */}
       <section className="bg-white pb-[100px]">
-        <TeamCarousel photos={memberPhotos} />
+        <TeamMemberCards />
       </section>
+
+      {/* Divider */}
+      <div className="w-full border-t border-text-primary/20" />
 
       {/* Partners */}
       <section className="bg-white py-[160px] px-[80px]">
@@ -153,13 +144,13 @@ export default function EquipoPage() {
       </section>
 
       {/* Reconocimientos */}
-      <section className="bg-bg-alt py-[100px] px-[80px]">
-        <div className="max-w-[1200px] mx-auto">
+      <section className="bg-bg-alt py-[100px]">
+        <div style={{ paddingLeft: "max(80px, calc((100vw - 1200px) / 2))", paddingRight: "max(80px, calc((100vw - 1200px) / 2))" }}>
           <h2 className="font-serif text-[30px] leading-[1.3] text-text-primary mb-[87px]">
             Reconocimientos
           </h2>
-          <AwardsCarousel awards={awards} />
         </div>
+        <AwardsCarousel awards={awards} />
       </section>
     </>
   );

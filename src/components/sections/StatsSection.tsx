@@ -81,7 +81,7 @@ export function StatsSection() {
                max(32px, calc((100vw - 1280px) / 2 + 32px)) centra el inicio
                al mismo lugar que el resto de la página. */
             paddingLeft: "max(24px, calc((100vw - 1280px) / 2 + 32px))",
-            paddingRight: "80px",
+            paddingRight: "max(32px, calc((100vw - 1280px) / 2 + 32px))",
           }}
         >
           {stats.map(({ value, label, description }) => (

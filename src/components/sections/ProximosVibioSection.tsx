@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 
 export function ProximosVibioSection() {
   return (
-    <section className="bg-bg-default pb-24 lg:pb-28">
+    <section className="bg-white pb-24 lg:pb-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex flex-col gap-[77px]">
           <div className="max-w-[653px]">

@@ -23,14 +23,15 @@ export function HeroSection() {
 
       {/* Centrado absoluto sin padding que reduzca el ancho del texto */}
       <div className="absolute inset-0 flex items-center justify-center px-6">
-        <div className="flex flex-col items-center text-center w-full max-w-[829px] gap-16">
-          <div className="flex flex-col items-center gap-6 w-full">
+        <div className="flex flex-col items-center text-center w-full max-w-[1200px] gap-16">
+          <div className="flex flex-col items-center gap-6 w-full -translate-y-[80px]">
             <p className="font-sans text-[22px] font-semibold tracking-[-0.044px] text-bg-default leading-[1.4]">
               Comunidades y viviendas para la biodiversidad
             </p>
-            <h1 className="font-serif text-[clamp(48px,_6.82vw,_98px)] leading-none text-bg-default w-full whitespace-nowrap">
+            <h1 className="font-serif text-[clamp(48px,_6.82vw,_98px)] leading-none text-bg-default w-full">
               Una alternativa real
-              <br />a la vida en la ciudad
+              <br />a la vida en la
+              <br />ciudad
             </h1>
           </div>
 
