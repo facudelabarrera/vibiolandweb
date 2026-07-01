@@ -83,26 +83,27 @@ const escalas = [
   },
 ];
 
-// Timing: cada card se desplaza cuando el borde derecho del bloque "llega" a ella
 const CARD_OFFSETS = [0.05, 0.18, 0.33];
 const CARD_X      = [50,   70,   90];
 
 export function EscalasSection() {
+  // Desktop state
   const [displayedIndex, setDisplayedIndex] = useState(0);
-
   const containerRef = useRef<HTMLDivElement>(null);
   const closedRef    = useRef<HTMLDivElement>(null);
   const openRef      = useRef<HTMLDivElement>(null);
   const cardRefs     = useRef<(HTMLButtonElement | null)[]>([]);
   const tlRef        = useRef<gsap.core.Timeline | null>(null);
+  const displayed    = escalas[displayedIndex];
 
-  const displayed = escalas[displayedIndex];
+  // Mobile state
+  const [openMobile, setOpenMobile] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     gsap.set(openRef.current, { display: "none", clipPath: "inset(0 100% 0 0 round 24px)" });
   }, []);
 
-  /* ── Open ──────────────────────────────────────────────────── */
+  /* ── Desktop Open ─────────────────────────────────────────── */
   const handleOpen = (index: number) => {
     tlRef.current?.kill();
     flushSync(() => setDisplayedIndex(index));
@@ -112,48 +113,31 @@ export function EscalasSection() {
     const open      = openRef.current!;
     const cards     = cardRefs.current.filter(Boolean) as HTMLButtonElement[];
 
-    // Altura actual (con closedRef en flujo normal)
     const fromH = container.offsetHeight;
 
-    // Mide openRef sin mostrarlo
     gsap.set(open, { display: "flex", visibility: "hidden", clipPath: "inset(0 100% 0 0 round 24px)" });
     const toH = open.scrollHeight;
     gsap.set(open, { display: "none", visibility: "visible" });
 
-    // Fija la altura del container, saca closedRef del flujo y lo pone encima
     gsap.set(container, { height: fromH, overflow: "hidden" });
     gsap.set(closed, { position: "absolute", top: 0, left: 0, right: 0, zIndex: 2 });
-
-    // Muestra openRef por debajo (en flujo, bajo el closedRef absoluto)
     gsap.set(open, { display: "flex", clipPath: "inset(0 100% 0 0 round 24px)", zIndex: 1 });
 
     tlRef.current = gsap.timeline({
       onComplete: () => {
-        // Container vuelve a flujo natural
         gsap.set(container, { clearProps: "height,overflow" });
-        // closedRef: oculto y de vuelta al flujo normal
         gsap.set(closed, { display: "none", clearProps: "position,top,left,right,zIndex" });
-        // openRef: limpia zIndex
         gsap.set(open, { clearProps: "zIndex", clipPath: "inset(0 0% 0 0 round 24px)" });
       },
     })
-      // Bloque blanco se revela de izquierda a derecha (por debajo de los cards)
-      .to(open, {
-        clipPath: "inset(0 0% 0 0 round 24px)",
-        duration: 0.65,
-        ease: "power3.inOut",
-      }, 0)
-
-      // Cada card se desplaza a la derecha como si el bloque la empujara
+      .to(open, { clipPath: "inset(0 0% 0 0 round 24px)", duration: 0.65, ease: "power3.inOut" }, 0)
       .to(cards[0], { x: CARD_X[0], opacity: 0, duration: 0.3, ease: "power2.in" }, CARD_OFFSETS[0])
       .to(cards[1], { x: CARD_X[1], opacity: 0, duration: 0.3, ease: "power2.in" }, CARD_OFFSETS[1])
       .to(cards[2], { x: CARD_X[2], opacity: 0, duration: 0.3, ease: "power2.in" }, CARD_OFFSETS[2])
-
-      // Container crece para acomodar el contenido expandido
       .to(container, { height: toH, duration: 0.55, ease: "power2.inOut" }, 0.05);
   };
 
-  /* ── Close ─────────────────────────────────────────────────── */
+  /* ── Desktop Close ────────────────────────────────────────── */
   const handleClose = () => {
     tlRef.current?.kill();
 
@@ -164,137 +148,187 @@ export function EscalasSection() {
 
     const fromH = container.offsetHeight;
 
-    // Mide la altura del estado cerrado
     gsap.set(cards, { x: 0, opacity: 1 });
     gsap.set(closed, { display: "flex", visibility: "hidden" });
     const toH = closed.scrollHeight;
     gsap.set(closed, { display: "none", visibility: "visible" });
 
-    // Fija altura, trae closedRef como capa absoluta encima del openRef
     gsap.set(container, { height: fromH, overflow: "hidden" });
-    gsap.set(closed, {
-      display: "flex",
-      position: "absolute", top: 0, left: 0, right: 0,
-      zIndex: 3,
-    });
+    gsap.set(closed, { display: "flex", position: "absolute", top: 0, left: 0, right: 0, zIndex: 3 });
     gsap.set(cards, { x: -40, opacity: 0 });
 
     tlRef.current = gsap.timeline({
       onComplete: () => {
         gsap.set(container, { clearProps: "height,overflow" });
-        // closedRef vuelve al flujo normal (display:flex lo da la clase CSS)
         gsap.set(closed, { clearProps: "position,top,left,right,zIndex" });
         gsap.set(open, { display: "none", clipPath: "inset(0 100% 0 0 round 24px)" });
       },
     })
-      // Bloque blanco se oculta de derecha a izquierda
-      .to(open, {
-        clipPath: "inset(0 100% 0 0 round 24px)",
-        duration: 0.5,
-        ease: "power3.in",
-      }, 0)
-
-      // Container se achica
+      .to(open, { clipPath: "inset(0 100% 0 0 round 24px)", duration: 0.5, ease: "power3.in" }, 0)
       .to(container, { height: toH, duration: 0.45, ease: "power2.inOut" }, 0)
-
-      // Cards aparecen entrando desde la izquierda (staggered)
       .to(cards[0], { x: 0, opacity: 1, duration: 0.35, ease: "power2.out" }, 0.2)
       .to(cards[1], { x: 0, opacity: 1, duration: 0.35, ease: "power2.out" }, 0.28)
       .to(cards[2], { x: 0, opacity: 1, duration: 0.35, ease: "power2.out" }, 0.36);
   };
 
   return (
-    <div className="mt-[72px] relative" ref={containerRef}>
+    <>
+      {/* ── MOBILE: acordeón FAQ ── */}
+      <div className="lg:hidden mt-8 flex flex-col gap-4">
+        {escalas.map((escala, i) => {
+          const isOpen = openMobile === i;
+          return (
+            <div key={escala.label}>
+              <button
+                type="button"
+                onClick={() => setOpenMobile(isOpen ? null : i)}
+                className="w-full h-[260px] relative text-left overflow-hidden rounded-[24px]"
+              >
+                <Image
+                  src={escala.image}
+                  alt={escala.label}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40" />
+                <div className="absolute bottom-0 left-0 right-0 px-6 py-5 flex items-center justify-between">
+                  <span className="font-serif text-[26px] leading-[1.3] text-bg-default">
+                    {escala.label}
+                  </span>
+                  <span
+                    className="w-[42px] h-[42px] rounded-full bg-white flex items-center justify-center shrink-0 transition-transform duration-300"
+                    style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 4v12M5 11l5 5 5-5" stroke="#242018" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </button>
 
-      {/* ── Panel cerrado: 3 cards (flujo normal) ── */}
-      <div ref={closedRef} className="flex gap-[19px]">
-        {escalas.map((escala, i) => (
-          <button
-            key={escala.label}
-            ref={(el) => { cardRefs.current[i] = el; }}
-            onClick={() => handleOpen(i)}
-            className="flex-1 h-[480px] relative rounded-[24px] overflow-hidden text-left"
-          >
+              <div
+                className="overflow-hidden transition-all duration-500 ease-in-out"
+                style={{ maxHeight: isOpen ? "2000px" : "0px", opacity: isOpen ? 1 : 0 }}
+              >
+                <div className="bg-white rounded-[24px] mt-2 p-5 flex flex-col gap-4">
+                  {escala.tagline && (
+                    <p className="font-serif text-[20px] leading-[1.3] text-text-primary">
+                      {escala.tagline.replace(/\n/g, " ")}
+                    </p>
+                  )}
+                  <div className="flex flex-col gap-3">
+                    {escala.content.map(({ title, body }) => (
+                      <p key={title} className="font-sans text-[14px] leading-[1.6] text-text-primary">
+                        <span className="font-semibold">{title}. </span>
+                        {body}
+                      </p>
+                    ))}
+                  </div>
+                  <p
+                    className="font-serif italic text-[13px] leading-[1.6]"
+                    style={{ color: escala.arrowColor }}
+                  >
+                    {DISCLAIMER}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── DESKTOP: animación GSAP ── */}
+      <div className="hidden lg:block mt-[72px] relative" ref={containerRef}>
+
+        {/* Panel cerrado: 3 cards */}
+        <div ref={closedRef} className="flex flex-row gap-[19px]">
+          {escalas.map((escala, i) => (
+            <button
+              key={escala.label}
+              ref={(el) => { cardRefs.current[i] = el; }}
+              onClick={() => handleOpen(i)}
+              className="flex-1 h-[480px] relative rounded-[24px] overflow-hidden text-left"
+            >
+              <Image
+                src={escala.image}
+                alt={escala.label}
+                fill
+                sizes="33vw"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="absolute bottom-0 left-0 right-0 p-[32px] flex items-center justify-between">
+                <span className="font-serif text-[30px] leading-[1.3] text-bg-default">
+                  {escala.label}
+                </span>
+                <span className="w-[42px] h-[42px] rounded-full bg-white flex items-center justify-center shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10h12M11 5l5 5-5 5" stroke="#242018" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Panel abierto */}
+        <div ref={openRef} className="flex gap-[4px]">
+          <div className="w-[400px] shrink-0 relative rounded-[24px] overflow-hidden min-h-[480px]">
             <Image
-              src={escala.image}
-              alt={escala.label}
+              src={displayed.image}
+              alt={displayed.label}
               fill
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes="400px"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/40" />
-            <div className="absolute bottom-0 left-0 right-0 p-[32px] flex items-center justify-between">
-              <span className="font-serif text-[30px] leading-[1.3] text-bg-default">
-                {escala.label}
-              </span>
-              <span className="w-[42px] h-[42px] rounded-full bg-white flex items-center justify-center shrink-0">
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                  <path d="M4 10h12M11 5l5 5-5 5" stroke="#242018" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/* ── Panel abierto: se revela por debajo via clip-path ── */}
-      <div ref={openRef} className="flex gap-[4px]">
-        {/* Imagen */}
-        <div className="w-[400px] shrink-0 relative rounded-[24px] overflow-hidden min-h-[480px]">
-          <Image
-            src={displayed.image}
-            alt={displayed.label}
-            fill
-            sizes="400px"
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-          <p className="absolute bottom-8 left-8 font-serif text-[30px] leading-[1.3] text-bg-default">
-            {displayed.label}
-          </p>
-        </div>
-
-        {/* Contenido */}
-        <div className="flex-1 bg-white rounded-[24px] p-[40px] flex flex-col justify-between">
-          <div className="flex gap-[40px]">
-            {displayed.tagline && (
-              <p className="font-serif text-[22px] leading-[1.3] text-text-primary whitespace-pre-line shrink-0 w-[180px]">
-                {displayed.tagline}
-              </p>
-            )}
-            {displayed.content.length > 0 && (
-              <div className="flex flex-col gap-[14px]">
-                {displayed.content.map(({ title, body }) => (
-                  <p key={title} className="font-sans text-[14px] leading-[1.6] text-text-primary">
-                    <span className="font-semibold">{title}. </span>
-                    {body}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-end gap-[40px] mt-8">
-            <button
-              onClick={handleClose}
-              className="shrink-0 w-[42px] h-[42px] rounded-full flex items-center justify-center"
-              style={{ backgroundColor: displayed.arrowColor }}
-              aria-label="Cerrar"
-            >
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                <path d="M16 10H4M9 5l-5 5 5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <p
-              className="font-serif italic text-[14px] leading-[1.6]"
-              style={{ color: displayed.arrowColor }}
-            >
-              {DISCLAIMER}
+            <p className="absolute bottom-8 left-8 font-serif text-[30px] leading-[1.3] text-bg-default">
+              {displayed.label}
             </p>
           </div>
-        </div>
-      </div>
 
-    </div>
+          <div className="flex-1 bg-white rounded-[24px] p-[40px] flex flex-col justify-between">
+            <div className="flex gap-[40px]">
+              {displayed.tagline && (
+                <p className="font-serif text-[22px] leading-[1.3] text-text-primary whitespace-pre-line shrink-0 w-[180px]">
+                  {displayed.tagline}
+                </p>
+              )}
+              {displayed.content.length > 0 && (
+                <div className="flex flex-col gap-[14px]">
+                  {displayed.content.map(({ title, body }) => (
+                    <p key={title} className="font-sans text-[14px] leading-[1.6] text-text-primary">
+                      <span className="font-semibold">{title}. </span>
+                      {body}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-end gap-[40px] mt-8">
+              <button
+                onClick={handleClose}
+                className="shrink-0 w-[42px] h-[42px] rounded-full flex items-center justify-center"
+                style={{ backgroundColor: displayed.arrowColor }}
+                aria-label="Cerrar"
+              >
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                  <path d="M16 10H4M9 5l-5 5 5 5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <p
+                className="font-serif italic text-[14px] leading-[1.6]"
+                style={{ color: displayed.arrowColor }}
+              >
+                {DISCLAIMER}
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </>
   );
 }

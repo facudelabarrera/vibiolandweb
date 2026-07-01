@@ -4,9 +4,11 @@ import { useState } from "react";
 
 // ── Info accordion (Comunidad / Territorio / Arquitectura / Impacto) ──────────
 
-const PlusIcon = ({ open }: { open: boolean }) => (
+const PlusIcon = ({ open, white = false }: { open: boolean; white?: boolean }) => (
   <span
-    className="shrink-0 w-[29px] h-[29px] rounded-full border border-tierra-600 flex items-center justify-center text-tierra-400 transition-transform duration-200"
+    className={`shrink-0 w-[29px] h-[29px] rounded-full border flex items-center justify-center transition-transform duration-200 ${
+      white ? "border-white text-white" : "border-tierra-600 text-tierra-400"
+    }`}
     style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
   >
     <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
@@ -123,7 +125,7 @@ const faqItems = [
       "Vibio forma parte del tejido local desde el primer día: contrata en el territorio, compra a proveedores locales y empadrona vecinos reales. La comunidad energética también está abierta a los vecinos del pueblo. No somos una burbuja: somos parte del pueblo.",
   },
   {
-    question: "¿Hasta qué punto tengo que implicarme en mi vida comunitaria?",
+    question: "¿Hasta qué punto tengo que implicarme en la vida comunitaria?",
     answer:
       "La implicación mínima es participar en la asamblea mensual y formar parte de al menos una comisión. El resto es completamente voluntario. No hay obligación de comer juntos, participar en actividades colectivas ni ningún tipo de vida comunal forzada.",
   },
@@ -143,20 +145,20 @@ function FaqRow({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-t border-tierra-700/60">
+    <div className="border-t border-white">
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between gap-6 py-[18px] text-left group"
         aria-expanded={open}
       >
-        <span className="font-sans text-[18px] leading-[1.6] text-bg-default group-hover:opacity-80 transition-opacity">
+        <span className="font-sans font-medium text-[18px] leading-[1.6] text-[#f1efe4] group-hover:opacity-80 transition-opacity">
           {question}
         </span>
-        <PlusIcon open={open} />
+        <PlusIcon open={open} white />
       </button>
       {open && (
         <div className="pb-[24px] pr-[48px]">
-          <p className="font-sans text-[16px] leading-[1.7] text-tierra-300">{answer}</p>
+          <p className="font-sans text-[16px] leading-[1.7] text-[#f1efe4]/70">{answer}</p>
         </div>
       )}
     </div>
@@ -169,7 +171,7 @@ export function HigueraFaqAccordion() {
       {faqItems.map((item) => (
         <FaqRow key={item.question} {...item} />
       ))}
-      <div className="border-t border-tierra-700/60" />
+      <div className="border-t border-white" />
     </div>
   );
 }
@@ -205,7 +207,90 @@ export function BerlangaFaqAccordion() {
       {berlangaFaqItems.map((item) => (
         <FaqRow key={item.question} {...item} />
       ))}
-      <div className="border-t border-tierra-700/60" />
+      <div className="border-t border-white" />
+    </div>
+  );
+}
+
+// ── Higuera contact form ──────────────────────────────────────────────────────
+
+export function HigueraContactForm() {
+  const inputClass =
+    "border border-[#a79854] rounded-full px-[16px] py-[10px] w-full font-sans text-base text-[#a79854] placeholder:text-[#a79854] placeholder:opacity-[0.54] bg-transparent outline-none focus:outline-none";
+  const textareaClass =
+    "border border-[#a79854] rounded-[16px] px-[16px] py-[10px] w-full h-[120px] resize-none font-sans text-base text-[#a79854] placeholder:text-[#a79854] placeholder:opacity-[0.54] bg-transparent outline-none focus:outline-none";
+  const labelClass = "font-sans text-sm leading-[1.6] text-black";
+
+  return (
+    <div className="flex flex-col gap-[24px]">
+      <div className="rounded-[32px] py-[24px] lg:p-[24px] flex flex-col gap-[24px]" style={{ backgroundColor: "#f1efe4" }}>
+        <div className="flex flex-col gap-[16px] sm:flex-row">
+          <div className="flex flex-col gap-[8px] flex-1">
+            <label className={labelClass}>Nombre</label>
+            <input type="text" placeholder="Nombre" className={inputClass} />
+          </div>
+          <div className="flex flex-col gap-[8px] flex-1">
+            <label className={labelClass}>Apellido</label>
+            <input type="text" placeholder="Apellido" className={inputClass} />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[16px] sm:flex-row">
+          <div className="flex flex-col gap-[8px] flex-1">
+            <label className={labelClass}>Teléfono</label>
+            <input type="tel" placeholder="+34 655 920 839" className={inputClass} />
+          </div>
+          <div className="flex flex-col gap-[8px] flex-1">
+            <label className={labelClass}>Correo Electrónico</label>
+            <input type="email" placeholder="nombre@gmail.com" className={inputClass} />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[16px] sm:flex-row">
+          <div className="flex flex-col gap-[8px] flex-1">
+            <label className={labelClass}>Edad</label>
+            <input type="text" placeholder="32" className={inputClass} />
+          </div>
+          <div className="flex flex-col gap-[8px] flex-1">
+            <label className={labelClass}>¿Qué tipo de casa te interesa?</label>
+            <input type="text" placeholder="Berta, Sunita, Canon, Mollison..." className={inputClass} />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[8px]">
+          <label className={labelClass}>Mensaje</label>
+          <textarea placeholder="Cuéntanos qué buscas..." className={textareaClass} />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-[8px]">
+        <label className="flex items-center gap-[8px] cursor-pointer">
+          <input
+            type="checkbox"
+            className="shrink-0 w-[13px] h-[13px] rounded-[4px] border border-black bg-transparent cursor-pointer appearance-none"
+          />
+          <span className="font-sans text-[13px] leading-[1.6] text-[#15130c]">
+            Acepto el envío de información comercial y mailings
+          </span>
+        </label>
+        <label className="flex items-center gap-[8px] cursor-pointer">
+          <input
+            type="checkbox"
+            className="shrink-0 w-[13px] h-[13px] rounded-[4px] border border-black bg-transparent cursor-pointer appearance-none"
+          />
+          <span className="font-sans text-[13px] leading-[1.6] text-[#15130c]">
+            Acepto las condiciones de las políticas de privacidad
+          </span>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        className="rounded-full h-[45px] px-[24px] font-sans font-medium text-[16px] text-[#15130c] w-fit flex items-center justify-center hover:opacity-90 transition-opacity"
+        style={{ backgroundColor: "#dbc56c" }}
+      >
+        Enviar
+      </button>
     </div>
   );
 }

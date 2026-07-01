@@ -11,8 +11,8 @@ export function ComoFuncionaContactForm() {
 
   return (
     <div className="flex flex-col gap-[24px]">
-      <div className="bg-bg-default rounded-[32px] p-[24px] flex flex-col gap-[24px]">
-        <div className="flex gap-4">
+      <div className="bg-bg-default rounded-[32px] flex flex-col gap-[24px]">
+        <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex flex-col gap-2 flex-1">
             <label className={labelClass}>Nombre</label>
             <input type="text" placeholder="Nombre" className={inputClass} />
@@ -23,7 +23,7 @@ export function ComoFuncionaContactForm() {
           </div>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex flex-col gap-2 flex-1">
             <label className={labelClass}>Teléfono</label>
             <input type="tel" placeholder="Teléfono" className={inputClass} />
@@ -34,7 +34,7 @@ export function ComoFuncionaContactForm() {
           </div>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex flex-col gap-2 flex-1">
             <label className={labelClass}>Edad</label>
             <input type="text" placeholder="Edad" className={inputClass} />
@@ -45,7 +45,7 @@ export function ComoFuncionaContactForm() {
           </div>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex flex-col gap-2 flex-1">
             <label className={labelClass}>¿Qué tipo de casa te interesa?</label>
             <input type="text" placeholder="Cohousing, coliving, covivienda..." className={inputClass} />
@@ -84,7 +84,7 @@ export function ComoFuncionaContactForm() {
         type="submit"
         className="bg-cta rounded-full px-[22px] py-[14px] h-[45px] font-sans text-[16px] text-text-primary w-[203px] text-center"
       >
-        Enviar mensaje
+        Enviar
       </button>
     </div>
   );

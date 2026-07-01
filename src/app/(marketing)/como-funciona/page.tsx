@@ -6,6 +6,7 @@ import { EscalasSection } from "@/components/sections/EscalasSection";
 import { FormasDeVivirSection } from "@/components/sections/FormasDeVivirSection";
 import { PasosSection } from "@/components/sections/PasosSection";
 import { DisenoSection } from "@/components/sections/DisenoSection";
+import { ProfilesCarousel } from "@/components/sections/ProfilesCarousel";
 
 export const metadata: Metadata = {
   title: "Cómo funciona — Vibioland",
@@ -31,14 +32,6 @@ const convictionCards = [
   },
 ];
 
-const galleryImages = [
-  "/images/card1.jpg",
-  "/images/card2.jpg",
-  "/images/card3.jpg",
-  "/images/card4.jpg",
-  "/images/card5.jpg",
-  "/images/card6.jpg",
-];
 
 const escalas = [
   { label: "El territorio", image: "/images/elterritorio.jpg" },
@@ -116,7 +109,7 @@ export default function ComoFuncionaPage() {
   return (
     <>
       {/* 1. Hero */}
-      <section className="relative h-screen min-h-[700px] overflow-hidden flex items-end">
+      <section className="relative h-[calc(100dvh-46px)] lg:h-dvh min-h-[600px] overflow-hidden">
         <Image
           src="/images/hero-comofunciona.png"
           alt="Comunidad Vibio en entorno natural"
@@ -125,39 +118,57 @@ export default function ComoFuncionaPage() {
           priority
         />
         <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex flex-col justify-between p-[80px] pt-40 max-w-7xl mx-auto w-full">
-          <div />
-          <div className="flex flex-col gap-8">
-            <h1
-              className="font-serif text-[75px] leading-[1.05] tracking-[-1.5px] text-bg-default"
-              style={{ letterSpacing: "-1.5px" }}
+        <div className="absolute inset-0 flex flex-col justify-between px-4 pt-10 pb-10 lg:p-[80px]">
+          <h1
+            className="font-serif text-[48px] lg:text-[75px] leading-[1.15] lg:leading-[1.05] text-bg-default max-w-7xl mx-auto w-full"
+            style={{ letterSpacing: "-0.5px" }}
+          >
+            <em>Del territorio a</em>
+            <br className="lg:hidden" />
+            <em> la vivienda: </em>
+            <br className="hidden lg:block" />
+            {"así"}
+            <br className="lg:hidden" />
+            {" se diseña cada"}
+            <br className="lg:hidden" />
+            {" comunidad"}
+          </h1>
+          <div className="flex flex-wrap gap-3 lg:gap-6 max-w-7xl mx-auto w-full">
+            <Link
+              href="#como-se-organiza"
+              className="inline-flex items-center justify-center rounded-full border-[1.5px] border-bg-default bg-black/40 text-bg-default px-4 lg:px-6 py-1.5 lg:py-3 font-sans text-[14px] lg:text-[16px] font-medium"
             >
-              <em>Del territorio a la vivienda: </em>
-              <br />
-              así se diseña cada comunidad
-            </h1>
-            <div className="flex gap-6">
-              <Link
-                href="#como-se-organiza"
-                className="inline-flex items-center justify-center rounded-full border-[1.5px] border-bg-default bg-black text-bg-default px-8 py-3 font-sans text-[16px] font-medium"
-              >
-                Cómo se organiza
-              </Link>
-              <Link
-                href="#como-se-disena"
-                className="inline-flex items-center justify-center rounded-full border-[1.5px] border-bg-default bg-black text-bg-default px-8 py-3 font-sans text-[16px] font-medium"
-              >
-                Cómo se diseña
-              </Link>
-            </div>
+              Cómo se organiza
+            </Link>
+            <Link
+              href="#como-se-disena"
+              className="inline-flex items-center justify-center rounded-full border-[1.5px] border-bg-default bg-black/40 text-bg-default px-4 lg:px-6 py-1.5 lg:py-3 font-sans text-[14px] lg:text-[16px] font-medium"
+            >
+              Cómo se diseña
+            </Link>
           </div>
         </div>
       </section>
 
       {/* 2. Al campo se llega */}
-      <section className="bg-white py-[160px] px-[80px]">
+      <section className="bg-white py-16 lg:py-[160px] px-4 lg:px-[80px]">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-serif text-[48px] leading-[1.1] max-w-[800px]">
+          <h2 className="font-serif text-[32px] leading-[1.1] max-w-[800px] lg:hidden">
+            Al campo se llega
+            <br />
+            por convicción.
+            <br />
+            Se abandona por
+            <br />
+            falta de condiciones.
+            <br />
+            Por eso existe vibio.
+            <br />
+            Para que quedarse
+            <br />
+            sea <em>siempre posible</em>.
+          </h2>
+          <h2 className="font-serif text-[48px] leading-[1.1] max-w-[800px] hidden lg:block">
             Al campo se llega por convicción.
             <br />
             Se abandona por falta de condiciones.
@@ -167,73 +178,61 @@ export default function ComoFuncionaPage() {
             Para que quedarse sea <em>siempre posible</em>.
           </h2>
 
-          <div className="flex gap-[17px] mt-12">
-            {convictionCards.map(({ category, title, body }) => (
-              <div
-                key={category}
-                className="flex-1 rounded-[24px] border border-bg-dark p-[32px] flex flex-col gap-[17px] items-center text-center"
-              >
-                <p className="font-sans text-[16px] text-text-muted uppercase">
-                  {category}
-                </p>
-                <p className="font-serif text-[30px] leading-[1.3] text-text-primary whitespace-pre-line">
-                  {title}
-                </p>
-                <p className="font-sans text-[16px] leading-[1.6] text-text-secondary">
-                  {body}
-                </p>
+          {/* Mobile: carrusel full-bleed alineado con el título. Desktop: flex-row normal */}
+          <div className="-mx-4 lg:mx-0 mt-8 lg:mt-12">
+            <div
+              className="overflow-x-auto [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory] lg:[scroll-snap-type:none] [scroll-padding-left:16px] lg:[scroll-padding-left:0]"
+              style={{ scrollbarWidth: "none" }}
+            >
+              <div className="flex gap-4 lg:gap-[17px] pl-4 pr-20 lg:pl-0 lg:pr-0">
+                {convictionCards.map(({ category, title, body }) => (
+                  <div
+                    key={category}
+                    className="shrink-0 w-[75vw] lg:w-auto lg:flex-1 rounded-[24px] border border-bg-dark p-6 lg:p-[32px] flex flex-col gap-3 lg:gap-[17px] items-center text-center [scroll-snap-align:start] lg:[scroll-snap-align:none]"
+                  >
+                    <p className="font-sans text-[13px] lg:text-[16px] text-text-muted uppercase">
+                      {category}
+                    </p>
+                    <p className="font-serif text-[20px] lg:text-[30px] leading-[1.3] text-text-primary whitespace-pre-line">
+                      {title}
+                    </p>
+                    <p className="font-sans text-[14px] lg:text-[16px] leading-[1.6] text-text-secondary text-left lg:text-center">
+                      {body}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* 3. Algunos rasgos */}
-      <section className="bg-white py-[100px] px-[80px]">
+      <section className="bg-white py-12 lg:py-[100px] px-4 lg:px-[80px]">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-serif text-[48px] leading-[1.1] max-w-[800px]">
-            Estos son algunos rasgos que comparten quienes ya forman parte de Vibio
+          <h2 className="font-serif text-[32px] lg:text-[48px] leading-[1.2] lg:leading-[1.1]">
+            {"Estos son algunos rasgos"}
+            <br className="lg:hidden" />
+            {" que comparten"}
+            <br className="hidden lg:block" />
+            {" quienes"}
+            <br className="lg:hidden" />
+            {" ya forman parte de Vibio"}
           </h2>
-
-          <div className="grid grid-cols-3 gap-[8px] mt-12">
-            {galleryImages.map((src, i) => (
-              <div
-                key={src}
-                className="relative rounded-[20px] overflow-hidden"
-                style={{ aspectRatio: "410/468" }}
-              >
-                <Image
-                  src={src}
-                  alt={`Rasgo ${i + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 flex justify-center">
-            <Link
-              href="/vibios"
-              className="inline-flex items-center justify-center bg-cta text-text-primary rounded-full px-[22px] py-[14px] h-[45px] font-sans text-[16px]"
-            >
-              Busca tu Vibio
-            </Link>
-          </div>
+          <ProfilesCarousel />
         </div>
       </section>
 
       {/* 4. Tres escalas */}
-      <section id="como-se-organiza" className="bg-bg-alt py-[100px] px-[80px]">
+      <section id="como-se-organiza" className="bg-bg-alt py-12 lg:py-[100px] px-4 lg:px-[80px]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex gap-[72px] items-start">
-            <h2 className="font-serif text-[48px] leading-[1.1] whitespace-nowrap">
+          <div className="flex flex-col gap-6 lg:flex-row lg:gap-[72px] lg:items-start">
+            <h2 className="font-serif text-[28px] lg:text-[48px] leading-[1.1] lg:whitespace-nowrap shrink-0">
               Tres escalas y un modelo
               <br />
               común en cada vibio
             </h2>
-            <p className="font-sans text-[22px] font-semibold leading-[1.4] tracking-[-0.044px] text-text-primary">
+            <p className="font-sans text-[18px] lg:text-[22px] font-normal lg:font-semibold leading-[1.4] tracking-[-0.044px] text-text-primary">
               Cada Vibio funciona en tres escalas al mismo tiempo: casa, comunidad y territorio. En cada una sabes siempre qué es tuyo, qué compartes y con quién.
             </p>
           </div>
@@ -252,16 +251,16 @@ export default function ComoFuncionaPage() {
       <DisenoSection />
 
       {/* 8. Formulario de contacto */}
-      <section className="bg-bg-default py-[100px] px-[80px]">
-        <div className="max-w-7xl mx-auto flex gap-[48px] items-start">
-          <div className="flex-1 flex flex-col gap-6">
-            <h2 className="font-serif text-[48px] leading-[1.1] text-black">
+      <section className="bg-bg-default py-12 lg:py-[100px] px-4 lg:px-[80px]">
+        <div className="max-w-7xl mx-auto flex flex-col gap-8 lg:flex-row lg:gap-[48px] lg:items-start">
+          <div className="lg:flex-1 flex flex-col gap-6">
+            <h2 className="font-serif text-[28px] lg:text-[48px] leading-[1.1] text-black">
               Si sientes que Vibio puede ser para ti, escríbenos.
             </h2>
-            <p className="font-sans text-[22px] font-semibold leading-[1.4] text-text-primary">
+            <p className="font-sans text-[18px] lg:text-[22px] font-semibold leading-[1.4] text-text-primary">
               Este formulario nos ayuda a entender tu contexto: quién eres, dónde estás, qué buscas y qué comunidad o territorio podrían encajar contigo.
             </p>
-            <p className="font-sans text-[18px] text-text-primary leading-[1.6]">
+            <p className="font-sans text-[16px] lg:text-[18px] text-text-primary leading-[1.6]">
               También puedes comunicarte por teléfono al{" "}
               <a
                 href="tel:+34655920839"
@@ -272,7 +271,7 @@ export default function ComoFuncionaPage() {
             </p>
           </div>
 
-          <div className="w-[592px]">
+          <div className="w-full lg:w-[592px]">
             <ComoFuncionaContactForm />
           </div>
         </div>

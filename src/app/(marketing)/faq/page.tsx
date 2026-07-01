@@ -199,22 +199,20 @@ export default function FaqPage() {
   return (
     <div className="bg-bg-dark">
       {/* Hero */}
-      <section className="pt-[181px] pb-[130px] px-[80px]">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-[519px_1fr] gap-[24px] items-start">
-          <h1 className="font-serif text-[48px] leading-[1.1] text-bg-default">
+      <section className="pt-12 pb-10 px-4 lg:pt-[181px] lg:pb-[130px] lg:px-[80px]">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-6 lg:flex-row lg:gap-[24px] lg:items-start">
+          <h1 className="font-serif text-[32px] lg:text-[48px] leading-[1.1] text-bg-default lg:shrink-0 lg:w-[519px]">
             Preguntas frecuentes
           </h1>
-          <div className="font-sans text-[18px] leading-[1.6] text-tierra-300 flex flex-col gap-[16px]">
-            <p>
-              Esto no es una compra de casa habitual. Esto es un proyecto de
-              vida, por eso sabemos que surgen muchas dudas. Aquí van las
-              respuestas a las preguntas que más nos llegan.
-            </p>
+          <div className="font-sans font-semibold text-[18px] lg:text-[22px] leading-[1.4] tracking-[-0.044px] text-bg-default flex flex-col gap-4">
+            <p>Esto no es una compra de casa habitual. Esto es un proyecto de vida, por eso sabemos que surgen muchas dudas.</p>
+            <p>Aquí van las respuestas a las preguntas que más nos llegan.</p>
             <p>
               Si la tuya no está, escríbenos a{" "}
               <a
                 href="mailto:hola@vibio.land"
-                className="text-cta underline hover:opacity-80 transition-opacity"
+                className="hover:opacity-80 transition-opacity"
+                style={{ color: "#f38163" }}
               >
                 hola@vibio.land
               </a>
@@ -224,8 +222,8 @@ export default function FaqPage() {
       </section>
 
       {/* FAQ */}
-      <section className="px-[80px] pb-[100px]">
-        <div className="max-w-[1200px] mx-auto">
+      <section className="px-4 lg:px-[80px] pb-16 lg:pb-[160px]">
+        <div className="max-w-[1200px] mx-auto flex flex-col gap-[24px]">
           {faqData.map((group) => (
             <AccordionGroup
               key={group.category}
@@ -233,8 +231,6 @@ export default function FaqPage() {
               items={group.items}
             />
           ))}
-          {/* Final border */}
-          <div className="border-t border-tierra-700/60" />
         </div>
       </section>
     </div>

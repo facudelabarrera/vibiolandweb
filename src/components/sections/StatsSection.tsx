@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 
 const stats = [
   {
@@ -47,6 +47,11 @@ const SCROLL_STEP = CARD_W + GAP;
 
 export function StatsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [atStart, setAtStart] = useState(true);
+
+  const handleScroll = useCallback(() => {
+    setAtStart((scrollRef.current?.scrollLeft ?? 0) <= 0);
+  }, []);
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({
@@ -59,7 +64,7 @@ export function StatsSection() {
     <section className="bg-cta py-24 lg:py-28">
       {/* Heading: contenido centrado */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 className="font-serif text-[48px] leading-[55px] tracking-[-0.96px] text-text-primary mb-40">
+        <h2 className="font-serif text-[28px] lg:text-[48px] leading-[1.15] lg:leading-[55px] tracking-[-0.96px] text-text-primary mb-10 lg:mb-40">
           Datos que diferencian una
           <br />
           {"promesa de un "}
@@ -70,28 +75,24 @@ export function StatsSection() {
       {/* Scroll full-bleed: sin right-boundary para que la card siempre asoma */}
       <div
         ref={scrollRef}
-        className="overflow-x-auto [&::-webkit-scrollbar]:hidden"
+        onScroll={handleScroll}
+        className="overflow-x-auto [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory] lg:[scroll-snap-type:none] [scroll-padding-left:16px] lg:[scroll-padding-left:0]"
         style={{ scrollbarWidth: "none" }}
       >
         <div
-          className="flex pb-2"
+          className="flex gap-3 lg:gap-[80px] pb-2"
           style={{
-            gap: `${GAP}px`,
-            /* Padding izquierdo = mismo indent que max-w-7xl con px-8.
-               max(32px, calc((100vw - 1280px) / 2 + 32px)) centra el inicio
-               al mismo lugar que el resto de la página. */
-            paddingLeft: "max(24px, calc((100vw - 1280px) / 2 + 32px))",
-            paddingRight: "max(32px, calc((100vw - 1280px) / 2 + 32px))",
+            paddingLeft: "max(16px, calc((100vw - 1280px) / 2 + 32px))",
+            paddingRight: "max(16px, calc((100vw - 1280px) / 2 + 32px))",
           }}
         >
           {stats.map(({ value, label, description }) => (
             <div
               key={label}
-              className="border-l border-text-primary pl-6 flex flex-col justify-between h-[432px] shrink-0"
-              style={{ width: `${CARD_W}px` }}
+              className="border-l border-text-primary pl-6 flex flex-col justify-between h-[432px] shrink-0 w-[75vw] lg:w-[340px] [scroll-snap-align:start] lg:[scroll-snap-align:none]"
             >
               <div>
-                <p className="font-serif text-[72px] text-text-primary leading-[1.05] mb-1">
+                <p className="font-serif text-[64px] lg:text-[72px] text-text-primary leading-[1.05] mb-1">
                   {value}
                 </p>
                 <p className="font-sans text-[14px] text-black leading-relaxed uppercase tracking-wide">
@@ -106,13 +107,13 @@ export function StatsSection() {
         </div>
       </div>
 
-      {/* Arrows: mismo contenedor centrado */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Arrows: desktop only */}
+      <div className="hidden lg:block mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex items-center justify-between mt-8">
           <button
             onClick={() => scroll("left")}
             aria-label="Anterior"
-            className="w-[42px] h-[42px] rounded-full border border-text-primary flex items-center justify-center text-text-primary hover:opacity-60 transition-opacity"
+            className={`w-[42px] h-[42px] rounded-full border border-text-primary flex items-center justify-center text-text-primary transition-all duration-200 hover:opacity-60 ${atStart ? "invisible" : "visible"}`}
           >
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
               <path d="M16 10H4M9 15l-5-5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

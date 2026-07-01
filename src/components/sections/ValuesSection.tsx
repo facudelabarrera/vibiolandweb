@@ -49,15 +49,15 @@ function AccordionCard({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex-1 min-w-0">
-      {/* SVG decorativo alineado con el título (offset = 29px circle + 12px gap) */}
-      <div className="relative w-[94px] h-[88px] mb-8 ml-[41px]">
+    <div className="w-full lg:flex-1 lg:min-w-0">
+      <div className="relative w-[56px] h-[52px] lg:w-[94px] lg:h-[88px] mb-5 lg:mb-8 mx-auto lg:mx-0 lg:ml-[41px]">
         <Image src={icon} alt={label} fill className="object-contain object-bottom" />
       </div>
 
       <button
+        type="button"
         onClick={onToggle}
-        className="flex items-start gap-3 w-full text-left"
+        className="flex flex-col-reverse items-center gap-3 w-full lg:flex-row lg:items-start lg:justify-start"
         aria-expanded={open}
       >
         <div
@@ -68,9 +68,9 @@ function AccordionCard({
             <path d="M5.5 1V10M1 5.5H10" stroke="#847132" strokeWidth="1.2" strokeLinecap="round" />
           </svg>
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 items-center text-center lg:items-start lg:text-left">
           <p className="font-sans text-[14px] text-brand-gold leading-relaxed">{label}</p>
-          <div className="font-serif text-[30px] text-text-primary leading-[1.3] whitespace-pre-line">
+          <div className="font-serif text-[24px] lg:text-[30px] text-text-primary leading-[1.3] whitespace-pre-line">
             {heading}
           </div>
         </div>
@@ -80,11 +80,11 @@ function AccordionCard({
         className="overflow-hidden transition-all duration-500 ease-in-out"
         style={{ maxHeight: open ? "600px" : "0px", opacity: open ? 1 : 0 }}
       >
-        <div className="flex flex-col gap-4 mt-6 pl-[calc(29px+12px)]">
+        <div className="flex flex-col gap-4 mt-6 text-center lg:text-left lg:pl-[calc(29px+12px)]">
           {body.map((paragraph, i) => (
             <p
               key={i}
-              className="font-sans text-[18px] font-semibold leading-[24px] text-text-primary"
+              className="font-sans text-[16px] lg:text-[18px] font-semibold leading-[24px] text-text-primary"
             >
               {paragraph}
             </p>
@@ -103,14 +103,17 @@ export function ValuesSection() {
   };
 
   return (
-    <section className="bg-bg-default py-40">
+    <section className="bg-bg-default py-16 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <p className="font-serif text-[48px] leading-[1.1] tracking-[-0.96px] text-text-primary max-w-[700px] mb-[155px]">
+        <p className="font-serif text-[28px] lg:text-[48px] max-lg:![line-height:1.0] lg:leading-[1.1] tracking-[-0.96px] text-text-primary max-w-[700px] mb-10 lg:mb-[155px]">
           <em>Diseñamos comunidades</em>
-          {" en entornos rurales para quienes buscan echar raíces"}
+          <br className="lg:hidden" />
+          {" en entornos rurales para"}
+          <br className="lg:hidden" />
+          {" quienes buscan echar raíces"}
         </p>
 
-        <div className="flex items-start gap-16 flex-wrap lg:flex-nowrap">
+        <div className="flex flex-col items-start gap-10 lg:flex-row lg:items-start lg:gap-16">
           {pillars.map((p, i) => (
             <AccordionCard
               key={p.label}

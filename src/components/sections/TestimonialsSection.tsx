@@ -1,6 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useLayoutEffect, useRef, useSyncExternalStore } from "react";
+
+const MOBILE_QUERY = "(max-width: 1023px)";
+function subscribeMobile(cb: () => void) {
+  const mq = window.matchMedia(MOBILE_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+function getMobileSnapshot() {
+  return window.matchMedia(MOBILE_QUERY).matches;
+}
 
 const testimonials = [
   {
@@ -57,17 +67,30 @@ const testimonials = [
 const CARD_W = 408;
 const SCROLL_STEP = CARD_W + 16;
 
+// Mobile carousel geometry (card width + gap-3)
+const MOBILE_CARD_W = 300;
+const MOBILE_GAP = 12;
+
 export function TestimonialsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, () => false);
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({ left: dir === "right" ? SCROLL_STEP : -SCROLL_STEP, behavior: "smooth" });
   };
 
+  // On mobile, start centered on the 2nd card so cards peek on BOTH sides (no empty left margin).
+  // Depends on isMobile so it runs AFTER the mobile inline sizes are applied (correct layout).
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el || !isMobile) return;
+    el.scrollLeft = MOBILE_CARD_W + MOBILE_GAP;
+  }, [isMobile]);
+
   return (
     <section className="bg-bg-default py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 className="font-serif text-[48px] leading-[55px] tracking-[-0.96px] text-text-secondary mb-16 lg:mb-20">
+        <h2 className="font-serif text-[32px] lg:text-[48px] leading-[1.15] lg:leading-[55px] tracking-[-0.96px] text-text-secondary mb-10 lg:mb-20">
           <em>Lo que dicen</em>
           {" quienes ya"}
           <br />
@@ -78,21 +101,25 @@ export function TestimonialsSection() {
       {/* Scroll full-bleed sin scrollbar */}
       <div
         ref={scrollRef}
-        className="overflow-x-auto [&::-webkit-scrollbar]:hidden"
+        className="overflow-x-auto [&::-webkit-scrollbar]:hidden [scroll-snap-type:x_mandatory] lg:[scroll-snap-type:none]"
         style={{ scrollbarWidth: "none" }}
       >
         <div
-          className="flex gap-4"
-          style={{
-            paddingLeft: "max(24px, calc((100vw - 1280px) / 2 + 32px))",
-            paddingRight: "80px",
-          }}
+          className="flex gap-3 lg:gap-4 lg:[padding-left:max(24px,calc((100vw-1280px)/2+32px))] lg:pr-20"
+          style={
+            isMobile
+              ? { paddingLeft: "calc(50vw - 150px)", paddingRight: "calc(50vw - 150px)" }
+              : undefined
+          }
         >
           {testimonials.map(({ name, role, quote, color }) => (
             <div
               key={name}
-              className="shrink-0 rounded-[32px] p-8 flex flex-col justify-between text-black [word-break:break-word]"
-              style={{ backgroundColor: color, width: `${CARD_W}px`, height: "420px" }}
+              className="shrink-0 rounded-[32px] p-6 lg:p-8 flex flex-col justify-between text-black [word-break:break-word] [scroll-snap-align:center] lg:[scroll-snap-align:none] lg:w-[408px] lg:h-[420px]"
+              style={{
+                backgroundColor: color,
+                ...(isMobile ? { width: MOBILE_CARD_W, minHeight: 360 } : {}),
+              }}
             >
               {/* Nombre y rol arriba */}
               <div className="flex flex-col gap-[2px]">
@@ -109,8 +136,8 @@ export function TestimonialsSection() {
         </div>
       </div>
 
-      {/* Arrows */}
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Arrows — desktop only */}
+      <div className="hidden lg:block mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex items-center justify-between mt-6">
           <button
             onClick={() => scroll("left")}

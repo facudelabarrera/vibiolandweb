@@ -34,7 +34,7 @@ export function ContactForm() {
             type="text"
             required
             placeholder="Tu nombre"
-            className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-sm text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors"
+            className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-base text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors"
           />
         </label>
 
@@ -47,7 +47,7 @@ export function ContactForm() {
             type="email"
             required
             placeholder="tu@email.com"
-            className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-sm text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors"
+            className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-base text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors"
           />
         </label>
       </div>
@@ -60,7 +60,7 @@ export function ContactForm() {
           name="phone"
           type="tel"
           placeholder="+34 600 000 000"
-          className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-sm text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors"
+          className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-base text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors"
         />
       </label>
 
@@ -72,7 +72,7 @@ export function ContactForm() {
           name="message"
           rows={5}
           placeholder="¿Qué te gustaría saber sobre Vibio?"
-          className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-sm text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors resize-none"
+          className="bg-bg-default border border-gris-claro rounded-xl px-4 py-3 font-sans text-base text-text-primary placeholder:text-gris-calido focus:outline-none focus:border-brand-gold transition-colors resize-none"
         />
       </label>
 

@@ -124,7 +124,7 @@ export function TeamMemberCards() {
       onMouseLeave={() => { pausedRef.current = false; }}
     >
       {/* Track */}
-      <div className="overflow-hidden pl-[80px]">
+      <div className="overflow-hidden pl-4 lg:pl-[80px]">
         <div ref={innerRef} className="flex" style={{ gap: `${GAP}px` }}>
           {doubled.map((member, i) => (
             <div
@@ -142,9 +142,9 @@ export function TeamMemberCards() {
                 />
               </div>
 
-              {/* Info overlay — hover state */}
+              {/* Info overlay — visible on hover (desktop) or always (touch) */}
               <div
-                className="absolute inset-0 p-[24px] flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-bg-default"
+                className="absolute inset-0 p-[24px] flex flex-col opacity-0 group-hover:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity duration-300 text-bg-default"
                 style={{ backgroundColor: "#847132" }}
               >
                 <div className="flex flex-col gap-px">
@@ -166,7 +166,7 @@ export function TeamMemberCards() {
       </div>
 
       {/* Navigation arrows */}
-      <div className="flex items-center justify-between mt-6 px-[80px]">
+      <div className="flex items-center justify-between mt-6 px-4 lg:px-[80px]">
         <button
           onClick={() => scroll("left")}
           aria-label="Anterior"

@@ -1,76 +1,83 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// Each step ~412px, gap 16px → tick interval = 428px
-const STEP_W = (2980 - 6 * 16) / 7; // ≈ 412
-const SCROLL_AMT = STEP_W + 16;
-const INNER_W = 2980;
+const GAP = 16;
+const ICON = 83;
+// Desktop: each step ~412px. Mobile: narrower so the 2nd item peeks (scroll affordance).
+const STEP_W = (2980 - 6 * GAP) / 7; // ≈ 412
+const STEP_W_MOBILE = 270;
+
+const MOBILE_QUERY = "(max-width: 1023px)";
+function subscribeMobile(cb: () => void) {
+  const mq = window.matchMedia(MOBILE_QUERY);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+function getMobileSnapshot() {
+  return window.matchMedia(MOBILE_QUERY).matches;
+}
 
 const steps = [
   {
-    titleStyle: "mulish",
     title: "Primero, nos cuentas",
     body: "Quién eres, cuál es tu momento, qué tipo de vivienda necesitas y qué comunidad estás buscando.",
-    bodyStyle: "regular",
   },
   {
-    titleStyle: "mulish",
     title: "Después, te orientamos",
     body: "Te ayudamos a encontrar el territorio, la comunidad y la casa que más sentido tienen para ti ahora.",
-    bodyStyle: "regular",
   },
   {
-    titleStyle: "stix-italic",
     title: "Sin compromiso, pre-registro",
     body: "Sin compromiso. Te sumas a la comunidad de personas interesadas, recibes actualizaciones y participas en encuentros abiertos.",
-    bodyStyle: "regular",
   },
   {
-    titleStyle: "stix",
     title: "Cuando estés listo, reserva",
     body: "Eliges tipología de vivienda y parcela. Se firma contrato de reserva y encuentras tu lugar en la comunidad.",
-    bodyStyle: "semibold",
   },
   {
-    titleStyle: "stix",
     title: "Mientras, se construye",
     body: "Pago el 20% al iniciar la obra. Subrogación hipotecaria con Triodos Bank. Seguimiento del proyecto.",
-    bodyStyle: "semibold",
   },
   {
-    titleStyle: "stix",
     title: "A continuación, mudanza",
     body: "Entrega de llaves tras 18-20 meses de construcción. Entras a una comunidad que ya es tuya. ¡Empieza tu nueva vida!",
-    bodyStyle: "semibold",
   },
   {
-    titleStyle: "stix",
     title: "Al final, ¡vivir!",
     body: "En una comunidad activa y resiliente, integrada en la naturaleza, con una casa que genera su propia energía, capta su propia agua y donde cultivar tu propio alimento. Menos dependencia. Más vida.",
-    bodyStyle: "semibold",
   },
 ];
 
 export function PasosSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isMobile = useSyncExternalStore(subscribeMobile, getMobileSnapshot, () => false);
+
+  const stepW = isMobile ? STEP_W_MOBILE : STEP_W;
+  const scrollAmt = stepW + GAP;
+  const innerW = 7 * stepW + 6 * GAP;
+  const iconLeft = 6 * scrollAmt - ICON / 2;
 
   const scrollNext = () => {
-    scrollRef.current?.scrollBy({ left: SCROLL_AMT, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: scrollAmt, behavior: "smooth" });
   };
 
   return (
-    <section className="bg-white py-[100px] px-[80px]">
+    <section className="bg-white py-12 lg:py-[100px] px-4 lg:px-[80px]">
       <div className="max-w-[1200px] mx-auto flex flex-col gap-[72px]">
 
         {/* Heading */}
         <div className="flex flex-col gap-[24px]">
-          <h2 className="font-serif text-[48px] leading-[1.1] tracking-[-0.96px] text-text-primary">
-            Primero entendemos <em>qué estás buscando</em>.
+          <h2 className="font-serif text-[28px] lg:text-[48px] leading-[1.1] tracking-[-0.96px] text-text-primary">
+            Primero entendemos
             <br />
-            Después hablamos de proyecto.
+            <em>qué estás buscando</em>.
+            <br />
+            Después hablamos
+            <br />
+            de proyecto.
           </h2>
           <p className="font-sans text-[18px] leading-[1.6] text-text-primary">
             Sin prisas, sin presión. Cada paso se construye en común.
@@ -85,7 +92,7 @@ export function PasosSection() {
             style={{ scrollbarWidth: "none" }}
           >
             {/* Fixed-width inner container */}
-            <div className="relative" style={{ width: `${INNER_W}px` }}>
+            <div className="relative" style={{ width: `${innerW}px` }}>
 
               {/* Horizontal line — full width, behind icon */}
               <div
@@ -93,11 +100,11 @@ export function PasosSection() {
                 style={{ top: "41px" }}
               />
 
-              {/* House icon — end marker, centered on line */}
+              {/* House icon — aligned with start of last step, centered on line */}
               <div
                 className="absolute top-0 rounded-full border flex items-center overflow-hidden"
                 style={{
-                  left: `${INNER_W - 83}px`,
+                  left: `${iconLeft}px`,
                   width: "83px",
                   height: "83px",
                   backgroundColor: "#f1edcf",
@@ -123,7 +130,7 @@ export function PasosSection() {
                   <div
                     key={i}
                     className="relative flex flex-col gap-[14px] text-black"
-                    style={{ flexBasis: `${STEP_W}px`, flexShrink: 0, flexGrow: 0, minWidth: 0 }}
+                    style={{ flexBasis: `${stepW}px`, flexShrink: 0, flexGrow: 0, minWidth: 0 }}
                   >
                     {/* Tick mark: centered on the line (line at 41px, step starts at 115px → offset = -(115-27) = -88px) */}
                     {i < 6 && (
@@ -134,30 +141,14 @@ export function PasosSection() {
                     )}
 
                     {/* Title */}
-                    {step.titleStyle === "mulish" && (
-                      <p className="font-sans font-semibold text-[22px] leading-[1.4] tracking-[-0.044px]">
-                        {step.title}
-                      </p>
-                    )}
-                    {step.titleStyle === "stix-italic" && (
-                      <p className="font-serif italic text-[24px] leading-[1.215]">
-                        {step.title}
-                      </p>
-                    )}
-                    {step.titleStyle === "stix" && (
-                      <p className="font-serif text-[30px] leading-[1.3]">
-                        {step.title}
-                      </p>
-                    )}
+                    <p className="font-serif italic text-[22px] leading-[1.3]">
+                      {step.title}
+                    </p>
 
                     {/* Body */}
-                    {step.bodyStyle === "regular" ? (
-                      <p className="font-sans text-[18px] leading-[1.6]">{step.body}</p>
-                    ) : (
-                      <p className="font-sans font-semibold text-[22px] leading-[1.4] tracking-[-0.044px]">
-                        {step.body}
-                      </p>
-                    )}
+                    <p className="font-sans text-[16px] leading-[1.6] text-text-primary">
+                      {step.body}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -168,7 +159,7 @@ export function PasosSection() {
           <button
             onClick={scrollNext}
             aria-label="Siguiente paso"
-            className="group flex items-center justify-center rounded-full border border-text-primary hover:bg-text-primary transition-colors duration-200"
+            className="group hidden lg:flex items-center justify-center rounded-full border border-text-primary hover:bg-text-primary transition-colors duration-200"
             style={{ width: "29px", height: "29px", flexShrink: 0 }}
           >
             <svg
@@ -190,17 +181,17 @@ export function PasosSection() {
         </div>
 
         {/* CTAs */}
-        <div className="flex gap-[16px] items-center">
+        <div className="flex flex-row gap-2 sm:gap-3 lg:gap-[16px] items-center">
           <Link
             href="/pre-registro"
-            className="inline-flex items-center justify-center rounded-full h-[45px] font-sans text-[16px] leading-[1.6] text-text-primary w-[245px]"
+            className="inline-flex items-center justify-center rounded-full h-[45px] font-sans text-[14px] sm:text-[16px] leading-[1.6] text-text-primary flex-1 sm:flex-none sm:w-[245px]"
             style={{ backgroundColor: "#dbc56c", border: "1.5px solid #dbc56c" }}
           >
             Hacer pre-registro
           </Link>
           <Link
             href="/contacta"
-            className="inline-flex items-center justify-center rounded-full h-[45px] font-sans text-[16px] leading-[1.6] w-[245px]"
+            className="inline-flex items-center justify-center rounded-full h-[45px] font-sans text-[14px] sm:text-[16px] leading-[1.6] flex-1 sm:flex-none sm:w-[245px]"
             style={{ backgroundColor: "#f1efe4", border: "1px solid #847132", color: "#847132" }}
           >
             Hablar con el equipo

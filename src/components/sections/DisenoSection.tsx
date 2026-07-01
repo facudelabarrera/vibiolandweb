@@ -39,38 +39,80 @@ const steps = [
 export function DisenoSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileRowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const circleRef = useRef<HTMLDivElement>(null);
+  const mobileCircleRef = useRef<HTMLDivElement>(null);
+  // Vertical offset from a mobile row's top to the number's center (aligns the dot)
+  const MOBILE_DOT_Y = 24;
   const [active, setActive] = useState(0);
   const activeRef = useRef(0);
+  // Absolute document-Y centers of each row, cached so scroll handler does zero reflows
+  const rowPositionsRef = useRef<number[]>([]);
+
+  const isMobileView = () => window.matchMedia("(max-width: 1023px)").matches;
+
+  const cachePositions = () => {
+    // Read whichever tree is actually visible (desktop rows are display:none on mobile)
+    const rows = isMobileView() ? mobileRowRefs.current : rowRefs.current;
+    rowPositionsRef.current = rows.map((row) => {
+      if (!row) return 0;
+      return window.scrollY + row.getBoundingClientRect().top + row.offsetHeight / 2;
+    });
+  };
 
   const moveCircleTo = (row: HTMLDivElement) => {
     if (!circleRef.current) return;
-    const target = row.offsetTop + row.offsetHeight / 2;
     gsap.to(circleRef.current, {
-      top: target,
+      top: row.offsetTop + row.offsetHeight / 2,
       duration: 0.25,
       ease: "power3.out",
+      overwrite: true,
+    });
+  };
+
+  const moveMobileCircleTo = (row: HTMLDivElement) => {
+    if (!mobileCircleRef.current) return;
+    gsap.to(mobileCircleRef.current, {
+      y: row.offsetTop + MOBILE_DOT_Y,
+      duration: 0.35,
+      ease: "power3.out",
+      overwrite: true,
     });
   };
 
   useEffect(() => {
+    cachePositions();
     const first = rowRefs.current[0];
     if (first && circleRef.current) {
       gsap.set(circleRef.current, { top: first.offsetTop + first.offsetHeight / 2 });
     }
+    const mFirst = mobileRowRefs.current[0];
+    if (mFirst && mobileCircleRef.current) {
+      // Center via xPercent/yPercent, position via x/y transform (not top → robust with GSAP)
+      gsap.set(mobileCircleRef.current, {
+        xPercent: -50,
+        yPercent: -50,
+        x: 6,
+        y: mFirst.offsetTop + MOBILE_DOT_Y,
+      });
+    }
+    window.addEventListener("resize", cachePositions);
+    const mq = window.matchMedia("(max-width: 1023px)");
+    mq.addEventListener("change", cachePositions);
+    return () => {
+      window.removeEventListener("resize", cachePositions);
+      mq.removeEventListener("change", cachePositions);
+    };
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       const viewportCenter = window.scrollY + window.innerHeight / 2;
-
       let closestIdx = 0;
       let closestDist = Infinity;
 
-      rowRefs.current.forEach((row, i) => {
-        if (!row) return;
-        const rowCenter = window.scrollY + row.getBoundingClientRect().top + row.offsetHeight / 2;
-        const dist = Math.abs(rowCenter - viewportCenter);
+      rowPositionsRef.current.forEach((pos, i) => {
+        const dist = Math.abs(pos - viewportCenter);
         if (dist < closestDist) {
           closestDist = dist;
           closestIdx = i;
@@ -80,8 +122,14 @@ export function DisenoSection() {
       if (closestIdx !== activeRef.current) {
         activeRef.current = closestIdx;
         setActive(closestIdx);
-        const row = rowRefs.current[closestIdx];
-        if (row) moveCircleTo(row);
+        // Move the active-step dot — desktop and mobile each have their own
+        if (isMobileView()) {
+          const row = mobileRowRefs.current[closestIdx];
+          if (row) moveMobileCircleTo(row);
+        } else {
+          const row = rowRefs.current[closestIdx];
+          if (row) moveCircleTo(row);
+        }
       }
     };
 
@@ -91,14 +139,59 @@ export function DisenoSection() {
   }, []);
 
   return (
-    <section id="como-se-disena" className="bg-cta py-[100px] px-[80px]">
+    <section id="como-se-disena" className="bg-cta py-12 lg:py-[100px] px-4 lg:px-[80px]">
       <div className="max-w-[1200px] mx-auto flex flex-col gap-[48px]">
-        <h2 className="font-serif text-[48px] leading-[1.1] text-black">
+        <h2 className="font-serif text-[28px] lg:text-[48px] leading-[1.1] text-black">
           Así abordamos el proceso de diseño:
         </h2>
 
-        {/* Timeline */}
-        <div ref={containerRef} className="relative flex flex-col gap-[36px]">
+        {/* Mobile: vertical timeline on the left, number above title, active dot */}
+        <div className="lg:hidden relative flex flex-col gap-10 pl-9">
+          {/* Vertical line — from the first dot down through the last row */}
+          <div
+            className="absolute w-px"
+            style={{ left: "6px", top: "24px", bottom: "0", backgroundColor: "#3f3926" }}
+          />
+
+          {/* Single moving dot — GSAP animates its y-transform to the active step */}
+          <div
+            ref={mobileCircleRef}
+            className="absolute rounded-full z-10"
+            style={{
+              left: 0,
+              top: 0,
+              width: "14px",
+              height: "14px",
+              backgroundColor: "#dbc56c",
+              border: "2px solid #3f3926",
+            }}
+          />
+
+          {steps.map((step, i) => {
+            const isActive = i === active;
+            return (
+              <div
+                key={i}
+                ref={(el) => { mobileRowRefs.current[i] = el; }}
+                className="relative"
+                style={{ opacity: isActive ? 1 : 0.3, transition: "opacity 0.5s ease" }}
+              >
+                <p className="font-serif text-[48px] leading-[1] text-text-primary">
+                  {step.number}
+                </p>
+                <p className="font-serif text-[20px] leading-[1.3] text-text-primary mt-3">
+                  {step.title}
+                </p>
+                <p className="font-sans text-[15px] leading-[1.6] text-text-primary mt-2">
+                  {step.body}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop: Timeline */}
+        <div ref={containerRef} className="hidden lg:relative lg:flex flex-col gap-[36px]">
 
           {/* Vertical center line */}
           <div

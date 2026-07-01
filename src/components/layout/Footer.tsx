@@ -70,14 +70,14 @@ function NewsletterForm() {
         <p className="font-sans text-sm text-text-secondary">¡Suscrito! Gracias.</p>
       ) : (
         <div className="space-y-3">
-          <div className="flex rounded-[37px] border border-text-primary overflow-hidden">
+          <div className="flex gap-2">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="tunombre@tucorreo.com"
-              className="flex-1 bg-transparent px-4 py-2.5 font-sans text-base text-text-muted placeholder:text-text-muted/60 focus:outline-none min-w-0"
+              className="flex-1 min-w-0 rounded-[37px] border border-text-primary bg-transparent px-4 py-2.5 font-sans text-base text-text-primary placeholder:text-text-primary/50 focus:outline-none"
             />
             <button
               type="button"
@@ -115,8 +115,67 @@ function NewsletterForm() {
 export function Footer() {
   return (
     <footer className="bg-cta text-text-primary">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-16 pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-16 mb-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-8 lg:pt-16 pb-10">
+
+        {/* ── Mobile (Figma layout): logo+tagline → newsletter → 3-col nav + social ── */}
+        <div className="lg:hidden flex flex-col gap-12">
+          {/* Logo (SVG already includes the tagline) */}
+          <Link href="/" className="block">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-footer.svg"
+              alt="vibio.land — Reencuentra. Rediseña. Regenera."
+              className="h-16 w-auto object-contain object-left"
+            />
+          </Link>
+
+          {/* Newsletter */}
+          <NewsletterForm />
+
+          {/* 3-column nav + social under CONTACTO */}
+          <div className="grid grid-cols-3 gap-3">
+            {Object.entries(footerLinks).map(([group, links]) => (
+              <div key={group}>
+                <p className="font-sans text-[12px] font-medium uppercase tracking-tight text-text-primary mb-3 whitespace-nowrap">
+                  {group}
+                </p>
+                <ul className="space-y-1.5">
+                  {links.map(({ href, label }) => (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        className={`font-sans text-[13px] text-text-primary hover:opacity-70 transition-opacity ${
+                          group === "CONTACTO" ? "underline" : ""
+                        }`}
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {group === "CONTACTO" && (
+                  <div className="flex gap-2 mt-4">
+                    {socialLinks.map(({ label, href, icon }) => (
+                      <a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        className="w-9 h-9 rounded-[8px] bg-text-primary text-cta flex items-center justify-center hover:opacity-90 transition-opacity"
+                      >
+                        {icon}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Desktop (unchanged) ── */}
+        <div className="hidden lg:grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 mb-12">
           {/* Left: logo + links */}
           <div className="flex flex-col gap-12">
             {/* Logo */}

@@ -52,13 +52,13 @@ export default function EquipoPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-white pt-[100px] pb-[72px] px-[80px]">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-[80px] items-start">
-          <h1 className="font-serif text-[56px] leading-[1.1] tracking-[-1.12px] text-text-primary">
+      <section className="bg-white pt-10 pb-8 px-4 lg:pt-[100px] lg:pb-[72px] lg:px-[80px]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-[80px] items-start">
+          <h1 className="font-serif text-[32px] lg:text-[56px] leading-[1.1] tracking-[-1.12px] text-text-primary">
             Uniendo fuerzas para construir{" "}
             <em>algo diferente</em>
           </h1>
-          <div className="flex flex-col gap-5 font-sans text-[18px] leading-[1.6] text-text-secondary pt-2">
+          <div className="flex flex-col gap-5 font-sans text-[18px] leading-[1.6] text-text-secondary lg:pt-2">
             <p>
               Detrás de Vibio hay un equipo diverso de personas: un equipo
               fundador, una red de colaboradores y una comunidad de personas que
@@ -89,8 +89,8 @@ export default function EquipoPage() {
       <div className="w-full border-t border-text-primary/20" />
 
       {/* Partners */}
-      <section className="bg-white py-[160px] px-[80px]">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-2 gap-[155px]">
+      <section className="bg-white py-16 lg:py-[160px] px-4 lg:px-[80px]">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-[155px]">
           {/* sAtt */}
           <div>
             <div className="relative mb-[24px] w-[120px] h-[63px]">
@@ -144,8 +144,8 @@ export default function EquipoPage() {
       </section>
 
       {/* Reconocimientos */}
-      <section className="bg-bg-alt py-[100px]">
-        <div style={{ paddingLeft: "max(80px, calc((100vw - 1200px) / 2))", paddingRight: "max(80px, calc((100vw - 1200px) / 2))" }}>
+      <section className="bg-bg-alt py-12 lg:py-[100px]">
+        <div style={{ paddingLeft: "max(16px, calc((100vw - 1200px) / 2))", paddingRight: "max(16px, calc((100vw - 1200px) / 2))" }}>
           <h2 className="font-serif text-[30px] leading-[1.3] text-text-primary mb-[87px]">
             Reconocimientos
           </h2>

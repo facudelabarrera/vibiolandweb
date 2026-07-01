@@ -28,9 +28,9 @@ export function AwardsCarousel({ awards }: { awards: Award[] }) {
       <div
         ref={trackRef}
         className="overflow-x-auto [&::-webkit-scrollbar]:hidden"
-        style={{ scrollbarWidth: "none", paddingLeft: "max(80px, calc((100vw - 1200px) / 2))" }}
+        style={{ scrollbarWidth: "none", paddingLeft: "max(16px, calc((100vw - 1200px) / 2))" }}
       >
-        <div className="flex" style={{ gap: `${GAP}px`, paddingRight: "max(80px, calc((100vw - 1200px) / 2))" }}>
+        <div className="flex" style={{ gap: `${GAP}px`, paddingRight: "max(16px, calc((100vw - 1200px) / 2))" }}>
           {awards.map((award, i) => (
             <div
               key={i}
@@ -58,7 +58,7 @@ export function AwardsCarousel({ awards }: { awards: Award[] }) {
 
       <div
         className="flex items-center justify-between mt-[24px]"
-        style={{ paddingLeft: "max(80px, calc((100vw - 1200px) / 2))", paddingRight: "max(80px, calc((100vw - 1200px) / 2))" }}
+        style={{ paddingLeft: "max(16px, calc((100vw - 1200px) / 2))", paddingRight: "max(16px, calc((100vw - 1200px) / 2))" }}
       >
         <button
           onClick={() => scroll("left")}

@@ -105,32 +105,38 @@ function RazonRow({
   paragraphs,
   photo,
   photoAlt,
+  isOpen,
+  onToggle,
 }: {
   number: string;
   title: string;
   paragraphs: string[];
   photo: string;
   photoAlt: string;
+  isOpen: boolean;
+  onToggle: () => void;
 }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <div className="border-t border-tierra-700/20">
       <button
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-6 py-[20px] text-left group"
-        aria-expanded={open}
+        onClick={onToggle}
+        className="w-full flex items-start justify-between gap-4 lg:gap-6 py-[14px] lg:py-[24px] text-left group"
+        aria-expanded={isOpen}
       >
-        <span className="font-serif text-[48px] leading-[1.1] text-bg-dark group-hover:opacity-80 transition-opacity">
-          <em>{number}</em> {title}
+        <span className="flex flex-1 gap-2 font-serif text-[22px] lg:text-[48px] leading-[1.2] lg:leading-[1.1] text-bg-dark group-hover:opacity-70 transition-opacity duration-200">
+          <em className="shrink-0">{number}</em>
+          <span>{title}</span>
         </span>
+
+        {/* Circle icon — + rotates to × on open */}
         <span
-          className="shrink-0 w-[36px] h-[36px] rounded-full border border-tierra-600 flex items-center justify-center text-tierra-400 transition-transform duration-200"
-          style={{ transform: open ? "rotate(45deg)" : "rotate(0deg)" }}
+          className="shrink-0 mt-[6px] lg:mt-[12px] w-[30px] h-[30px] lg:w-[34px] lg:h-[34px] rounded-full border border-bg-dark flex items-center justify-center text-bg-dark transition-transform duration-300 ease-in-out"
+          style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0deg)" }}
+          aria-hidden
         >
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <svg width="12" height="12" viewBox="0 0 13 13" fill="none">
             <path
-              d="M6 1v10M1 6h10"
+              d="M6.5 1v11M1 6.5h11"
               stroke="currentColor"
               strokeWidth="1.3"
               strokeLinecap="round"
@@ -139,29 +145,63 @@ function RazonRow({
         </span>
       </button>
 
-      {open && (
-        <div className="grid grid-cols-[1fr_400px] gap-[48px] pb-[48px]">
-          <div className="flex flex-col gap-[16px]">
-            {paragraphs.map((p, i) => (
-              <p key={i} className="font-sans text-[16px] leading-[1.7] text-tierra-700">
-                {p}
-              </p>
-            ))}
-          </div>
-          <div className="relative h-[220px] rounded-[16px] overflow-hidden">
-            <Image src={photo} alt={photoAlt} fill sizes="400px" className="object-cover" />
+      {/* Animated body — grid-template-rows trick: no JS height measurement needed */}
+      <div
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+        style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
+      >
+        <div className="overflow-hidden">
+          <div
+            className="flex flex-col gap-6 lg:grid lg:grid-cols-[1fr_400px] lg:gap-[48px] pb-[48px] transition-opacity duration-200"
+            style={{
+              opacity: isOpen ? 1 : 0,
+              transitionDelay: isOpen ? "100ms" : "0ms",
+            }}
+          >
+            {/* Text */}
+            <div className="flex flex-col gap-[16px]">
+              {paragraphs.map((p, i) => (
+                <p key={i} className="font-sans text-[16px] leading-[1.7] text-tierra-700">
+                  {p}
+                </p>
+              ))}
+            </div>
+
+            {/* Image — stretches to text height, min 220px */}
+            <div
+              className="relative rounded-[20px] overflow-hidden"
+              style={{ minHeight: "220px" }}
+            >
+              <Image
+                src={photo}
+                alt={photoAlt}
+                fill
+                sizes="400px"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
 export function RazonesAccordion() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (i: number) =>
+    setOpenIndex((prev) => (prev === i ? null : i));
+
   return (
     <div>
-      {razones.map((r) => (
-        <RazonRow key={r.number} {...r} />
+      {razones.map((r, i) => (
+        <RazonRow
+          key={r.number}
+          {...r}
+          isOpen={openIndex === i}
+          onToggle={() => toggle(i)}
+        />
       ))}
       <div className="border-t border-tierra-700/20" />
     </div>
